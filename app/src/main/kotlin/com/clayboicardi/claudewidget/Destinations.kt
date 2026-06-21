@@ -31,10 +31,8 @@ object Destinations {
         ),
     )
 
-    // PROVISIONAL until the Task 1 on-device probe runs (Pixel not yet connected).
-    // `claude://new` is the leading probe candidate; the ClaudeHome -> PlayStore tail keeps
-    // this safe even if the URI is wrong. Finalize the URI + label/confidence
-    // (Chat vs "Open Claude", PROBED vs FALLBACK_ONLY) from docs/route-probe.md.
+    // Chat opens a new conversation composer in one tap (keyboard up) — validated on a
+    // Pixel 10 Pro XL / API 37 against Claude 1.260611.30. See docs/route-probe.md.
     private val chat = Destination(
         id = ClaudeAction.CHAT.id,
         label = "Chat",
