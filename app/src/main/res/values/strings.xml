@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Claude Widget</string>
+    <string name="widget_description">Launch Claude Chat or Code</string>
+    <string name="pill_hint">Ask Claude…</string>
+    <string name="label_chat">Chat</string>
+    <string name="label_code">Code</string>
+</resources>

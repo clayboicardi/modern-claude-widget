@@ -33,6 +33,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
+    testOptions {
+        unitTests {
+            // glance-appwidget-testing's unit environment touches android.os.Bundle; let the
+            // stub android.jar return defaults instead of throwing "not mocked".
+            isReturnDefaultValues = true
+        }
+    }
 }
 
 kotlin {
