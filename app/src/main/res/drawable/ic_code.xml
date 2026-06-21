@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Original "</>" chevrons glyph. Not Anthropic's mark. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M8.7,7.3L3.4,12.6a0.5,0.5 0 0 0 0,0.7l5.3,5.3 1.4,-1.4 -4.6,-4.3 4.6,-4.2zM15.3,7.3l-1.4,1.4 4.6,4.2 -4.6,4.3 1.4,1.4 5.3,-5.3a0.5,0.5 0 0 0 0,-0.7z" />
+</vector>

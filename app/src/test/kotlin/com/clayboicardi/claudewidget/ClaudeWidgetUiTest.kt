@@ -2,20 +2,23 @@ package com.clayboicardi.claudewidget
 
 import androidx.glance.appwidget.testing.unit.runGlanceAppWidgetUnitTest
 import androidx.glance.testing.unit.hasClickAction
+import androidx.glance.testing.unit.hasContentDescriptionEqualTo
 import androidx.glance.testing.unit.hasText
 import org.junit.Test
 
 class ClaudeWidgetUiTest {
 
-    // Asserts the pill + both buttons exist AND each carries a click action. Per the spec,
-    // this verifies attachment only — actual launch + Claude's resulting screen stay an
-    // on-device acceptance check (Task 5 Step 10).
+    // Asserts attachment only (per the spec): the pill + both icon buttons are three
+    // independent click targets, the pill shows its hint, and each button carries its
+    // content description. Actual launch + Claude's screen are on-device acceptance checks.
     @Test
-    fun renders_pill_and_two_buttons_each_with_a_click_action() = runGlanceAppWidgetUnitTest {
+    fun renders_pill_and_two_buttons_each_clickable() = runGlanceAppWidgetUnitTest {
         provideComposable { ClaudeWidgetContent() }
 
-        onNode(hasText("Ask Claude…")).assert(hasClickAction())
-        onNode(hasText("Chat")).assert(hasClickAction())
-        onNode(hasText("Code")).assert(hasClickAction())
+        onAllNodes(hasClickAction()).assertCountEquals(3)
+
+        onNode(hasText("Ask Claude…")).assertExists()
+        onNode(hasContentDescriptionEqualTo("Chat")).assertExists()
+        onNode(hasContentDescriptionEqualTo("Code")).assertExists()
     }
 }
