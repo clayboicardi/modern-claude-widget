@@ -1,0 +1,17 @@
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build
+/app/build
+/captures
+.externalNativeBuild
+.cxx
+*.apk
+
+# probe artifacts (raw screenshots; the curated results live in docs/route-probe.md)
+/probe_*.png
+
+# transient build logs captured during local runs
+/build-*.log

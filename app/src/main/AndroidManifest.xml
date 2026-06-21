@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Package visibility (API 30+): the launcher intents below are filtered unless the
+         targets are declared visible. com.anthropic.claude is required for the deep-link +
+         getLaunchIntentForPackage paths; com.android.vending + the https VIEW intent are
+         the deliberate widening so the Play Store *web* fallback can resolve. -->
+    <queries>
+        <package android:name="com.anthropic.claude" />
+        <package android:name="com.android.vending" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:label="Claude Widget" />
+</manifest>
