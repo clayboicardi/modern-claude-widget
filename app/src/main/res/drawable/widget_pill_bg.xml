@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  "Ask Claude…" pill background.
+  Web source: linear-gradient(135deg, #47007D @ 51%, #08FF08 @ 6%) over #161B27.
+  CSS 135deg (to bottom-right) == Android angle 315.
+  Corners 22dp.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/ink_800" />
+            <corners android:radius="@dimen/radius_pill" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="315"
+                android:startColor="@color/grad_pill_purple"
+                android:endColor="@color/grad_pill_green" />
+            <corners android:radius="@dimen/radius_pill" />
+        </shape>
+    </item>
+</layer-list>

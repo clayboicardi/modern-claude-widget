@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Widget shell background. Glance/RemoteViews CANNOT render CSS-style gradients
+  via a modifier, so the gradient is baked into this shape drawable and applied
+  as an ImageProvider background (see ClaudeWidgetContent.kt).
+
+  Web source (design system):
+    radial top-left  : #47007D @ 58%  ->  transparent (58% of the box)
+    radial bottom-rt : #08FF08 @ 26%  ->  transparent (55% of the box)
+    base fill        : #0D1019
+  Corners 28dp baked in so it clips correctly below Android 12 (where the
+  Glance .cornerRadius() modifier is unavailable).
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- base fill -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/ink_850" />
+            <corners android:radius="@dimen/radius_container" />
+        </shape>
+    </item>
+
+    <!-- purple radial, top-left -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:centerX="0.0"
+                android:centerY="0.0"
+                android:gradientRadius="80%p"
+                android:startColor="@color/grad_shell_purple"
+                android:endColor="#0047007D" />
+            <corners android:radius="@dimen/radius_container" />
+        </shape>
+    </item>
+
+    <!-- green radial, bottom-right -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:centerX="1.0"
+                android:centerY="1.0"
+                android:gradientRadius="75%p"
+                android:startColor="@color/grad_shell_green"
+                android:endColor="#0008FF08" />
+            <corners android:radius="@dimen/radius_container" />
+        </shape>
+    </item>
+
+</layer-list>

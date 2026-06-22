@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Widget color palette — Modern Claude Widget (Clayboicardi brand reskin).
+  Values mirror the design system tokens (tokens/colors.css).
+  ARGB (#AARRGGBB) values are pre-computed for the translucent gradient stops
+  used in the shape drawables.
+-->
+<resources>
+    <!-- Base ink ramp (dark blue-black) -->
+    <color name="ink_900">#FF02050A</color>   <!-- home-screen backdrop -->
+    <color name="ink_850">#FF0D1019</color>   <!-- widget shell base    -->
+    <color name="ink_800">#FF161B27</color>   <!-- pill base            -->
+    <color name="ink_700">#FF222A3A</color>   <!-- button base          -->
+    <color name="ink_600">#FF2B3446</color>   <!-- button pressed        -->
+
+    <!-- Text / icon -->
+    <color name="text_primary">#FFF4F5F7</color>
+    <color name="text_muted">#FF8B909B</color>
+
+    <!-- Brand accents -->
+    <color name="brand_green">#FF08FF08</color>   <!-- accent + pill/button text + glyphs -->
+    <color name="brand_purple">#FF47007D</color>  <!-- brand / CTA -->
+
+    <!-- Translucent gradient stops (color @ alpha) — see drawables.
+         Brightened a touch from the handoff defaults (Clay feedback 2026-06-21). -->
+    <color name="grad_shell_purple">#A247007D</color> <!-- #47007D @ ~64% -->
+    <color name="grad_shell_green">#5408FF08</color>  <!-- #08FF08 @ ~33% -->
+    <color name="grad_pill_purple">#9247007D</color>  <!-- #47007D @ ~57% -->
+    <color name="grad_pill_green">#1A08FF08</color>   <!-- #08FF08 @ ~10% -->
+    <color name="grad_btn_purple">#C847007D</color>   <!-- #47007D @ ~78% -->
+    <color name="grad_btn_green">#2A08FF08</color>    <!-- #08FF08 @ ~16% -->
+</resources>

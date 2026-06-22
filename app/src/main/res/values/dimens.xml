@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Widget geometry — all values in dp/sp, 1:1 with the design system. -->
+<resources>
+    <dimen name="widget_width">380dp</dimen>
+    <dimen name="widget_height">168dp</dimen>
+
+    <dimen name="widget_padding">12dp</dimen>        <!-- shell inner padding        -->
+    <dimen name="gap_pill_row">10dp</dimen>          <!-- pill ↔ button row          -->
+    <dimen name="gap_buttons">8dp</dimen>            <!-- between the two buttons     -->
+
+    <dimen name="control_height">48dp</dimen>        <!-- pill + button touch target  -->
+    <dimen name="icon_size">22dp</dimen>             <!-- glyph + logo                -->
+    <dimen name="pill_pad_h">16dp</dimen>
+
+    <dimen name="radius_container">28dp</dimen>
+    <dimen name="radius_pill">22dp</dimen>
+    <dimen name="radius_control">16dp</dimen>
+
+    <dimen name="text_pill">15sp</dimen>
+    <dimen name="text_label">14sp</dimen>
+</resources>

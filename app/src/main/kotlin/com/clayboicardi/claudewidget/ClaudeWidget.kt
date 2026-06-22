@@ -20,9 +20,8 @@ import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.layout.Alignment
-import androidx.glance.layout.Row
-import androidx.glance.layout.RowScope
 import androidx.glance.layout.Column
+import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
@@ -30,18 +29,13 @@ import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
 import androidx.glance.layout.width
-import androidx.glance.semantics.contentDescription
-import androidx.glance.semantics.semantics
+import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 
-// Original dark palette — inspired by, not copied from, the ChatGPT widget.
-private val Container = Color(0xFF1C1C1E)
-private val Pill = Color(0xFF2C2C2E)
-private val IconBg = Color(0xFF3A3A3C)
-private val OnSurface = Color(0xFFECECEC)
-private val Muted = Color(0xFF8E8E93)
+// Phosphor-green brand accent used for all pill/button text + glyph tint.
+private val BrandGreen = ColorProvider(Color(0xFF08FF08))
 
 class ClaudeWidget : GlanceAppWidget() {
     override val sizeMode = SizeMode.Exact
@@ -51,13 +45,17 @@ class ClaudeWidget : GlanceAppWidget() {
     }
 }
 
+/** A click action routed through [LaunchActionCallback]'s ordered-attempt registry walk
+ *  (preserves fail-closed + Play Store fallback + the verified BAL launch). */
 private fun destClick(destId: String): Action =
     actionRunCallback<LaunchActionCallback>(actionParametersOf(ActionKeys.DEST to destId))
 
 /**
- * Rounded dark container, a fake "Ask Claude…" input pill (-> new chat), and an icon-button
- * row (Chat, Code). Labels appear once the widget is wide enough (Standard 4x2); Compact 2x2
- * shows icons only. Each clickable container is its own >=48dp touch target.
+ * Clayboicardi-brand reskin: blue-black shell with purple->green gradients, phosphor-green
+ * text/glyphs, CC logo in the pill. Glance has no gradient modifier, so gradients ship as
+ * layer-list shape drawables applied via ImageProvider backgrounds (corners baked in for
+ * pre-API-31 clipping; .cornerRadius() kept as belt-and-suspenders on 31+). Launch wiring is
+ * unchanged — only the visuals changed.
  */
 @Composable
 internal fun ClaudeWidgetContent() {
@@ -66,62 +64,73 @@ internal fun ClaudeWidgetContent() {
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
-            .background(ColorProvider(Container))
+            .background(ImageProvider(R.drawable.widget_shell_bg))
             .cornerRadius(28.dp)
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        // Input pill -> new chat
         Row(
             modifier = GlanceModifier
                 .fillMaxWidth()
-                .background(ColorProvider(Pill))
+                .height(48.dp)
+                .background(ImageProvider(R.drawable.widget_pill_bg))
                 .cornerRadius(22.dp)
-                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .padding(horizontal = 16.dp)
                 .clickable(destClick(ClaudeAction.CHAT.id)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            Image(
+                provider = ImageProvider(R.drawable.cc_logo),
+                contentDescription = null,
+                modifier = GlanceModifier.size(22.dp),
+            )
+            Spacer(GlanceModifier.width(8.dp))
             Text(
                 text = "Ask Claude…",
-                style = TextStyle(color = ColorProvider(Muted), fontSize = 15.sp),
+                style = TextStyle(color = BrandGreen, fontSize = 15.sp),
             )
         }
 
         Spacer(GlanceModifier.height(10.dp))
 
         Row(modifier = GlanceModifier.fillMaxWidth()) {
-            IconAction(R.drawable.ic_chat, "Chat", showLabels, destClick(ClaudeAction.CHAT.id))
+            LaunchButton(R.drawable.ic_chat, "Chat", ClaudeAction.CHAT.id, showLabels, GlanceModifier.defaultWeight())
             Spacer(GlanceModifier.width(8.dp))
-            IconAction(R.drawable.ic_code, "Code", showLabels, destClick(ClaudeAction.CODE.id))
+            LaunchButton(R.drawable.ic_code, "Code", ClaudeAction.CODE.id, showLabels, GlanceModifier.defaultWeight())
         }
     }
 }
 
 @Composable
-private fun RowScope.IconAction(
+private fun LaunchButton(
     iconRes: Int,
     label: String,
+    destId: String,
     showLabel: Boolean,
-    onClick: Action,
+    modifier: GlanceModifier,
 ) {
     Row(
-        modifier = GlanceModifier
-            .defaultWeight()
+        modifier = modifier
             .height(48.dp)
-            .background(ColorProvider(IconBg))
+            .background(ImageProvider(R.drawable.widget_button_bg))
             .cornerRadius(16.dp)
-            .clickable(onClick)
-            .semantics { contentDescription = label },
-        verticalAlignment = Alignment.CenterVertically,
+            .clickable(destClick(destId)),
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
+        // Glyph is green-tinted inside the vector (android:tint), so no per-call tint needed.
         Image(
             provider = ImageProvider(iconRes),
-            contentDescription = null,
+            contentDescription = label,
             modifier = GlanceModifier.size(22.dp),
         )
         if (showLabel) {
             Spacer(GlanceModifier.width(8.dp))
-            Text(text = label, style = TextStyle(color = ColorProvider(OnSurface), fontSize = 14.sp))
+            Text(
+                text = label,
+                style = TextStyle(color = BrandGreen, fontSize = 14.sp, fontWeight = FontWeight.Medium),
+            )
         }
     }
 }

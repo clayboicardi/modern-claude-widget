@@ -15,3 +15,6 @@
 
 # transient build logs captured during local runs
 /build-*.log
+
+# raw design handoff from Claude Design (reference only; integrated into app/src)
+/claude-design-handoff/
