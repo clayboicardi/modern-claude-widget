@@ -3,7 +3,7 @@ package com.clayboicardi.claudewidget
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
+import androidx.core.net.toUri
 import androidx.glance.GlanceId
 import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.action.ActionCallback
@@ -42,7 +42,7 @@ class LaunchActionCallback : ActionCallback {
             // surface. Verified on-device (Pixel 10 Pro XL / API 37): see docs/route-probe.md.
             is LaunchAttempt.ViewUri -> start(
                 context,
-                Intent(Intent.ACTION_VIEW, Uri.parse(attempt.uri))
+                Intent(Intent.ACTION_VIEW, attempt.uri.toUri())
                     .setPackage(attempt.packageName)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK),
             )
@@ -66,13 +66,13 @@ class LaunchActionCallback : ActionCallback {
     private fun launchPlayStore(context: Context): Boolean {
         val market = Intent(
             Intent.ACTION_VIEW,
-            Uri.parse("market://details?id=${Destinations.CLAUDE_PKG}"),
+            "market://details?id=${Destinations.CLAUDE_PKG}".toUri(),
         ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         if (start(context, market)) return true
 
         val web = Intent(
             Intent.ACTION_VIEW,
-            Uri.parse("https://play.google.com/store/apps/details?id=${Destinations.CLAUDE_PKG}"),
+            "https://play.google.com/store/apps/details?id=${Destinations.CLAUDE_PKG}".toUri(),
         ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         return start(context, web)
     }

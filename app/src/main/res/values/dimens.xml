@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Widget geometry — all values in dp/sp, 1:1 with the design system. -->
 <resources>
-    <dimen name="widget_width">380dp</dimen>
     <dimen name="widget_height">168dp</dimen>
 
     <dimen name="widget_padding">12dp</dimen>        <!-- shell inner padding        -->

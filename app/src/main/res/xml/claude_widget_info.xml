@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- previewLayout/previewImage are intentionally absent here: they reference resources that
-     don't exist until Task 7. Adding them now would break the build. -->
+<!-- previewLayout is the scalable Android 12+ picker preview (see res/layout/widget_preview.xml).
+     previewImage (a rendered screenshot) can be added as the pre-12 fallback. -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="250dp"
-    android:minHeight="168dp"
+    android:minHeight="@dimen/widget_height"
     android:minResizeWidth="180dp"
     android:minResizeHeight="140dp"
     android:targetCellWidth="4"
@@ -12,4 +12,5 @@
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen"
     android:description="@string/widget_description"
-    android:initialLayout="@layout/widget_loading" />
+    android:initialLayout="@layout/widget_loading"
+    android:previewLayout="@layout/widget_preview" />

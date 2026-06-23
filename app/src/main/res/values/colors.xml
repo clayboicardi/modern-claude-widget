@@ -7,15 +7,10 @@
 -->
 <resources>
     <!-- Base ink ramp (dark blue-black) -->
-    <color name="ink_900">#FF02050A</color>   <!-- home-screen backdrop -->
     <color name="ink_850">#FF0D1019</color>   <!-- widget shell base    -->
     <color name="ink_800">#FF161B27</color>   <!-- pill base            -->
     <color name="ink_700">#FF222A3A</color>   <!-- button base          -->
     <color name="ink_600">#FF2B3446</color>   <!-- button pressed        -->
-
-    <!-- Text / icon -->
-    <color name="text_primary">#FFF4F5F7</color>
-    <color name="text_muted">#FF8B909B</color>
 
     <!-- Brand accents -->
     <color name="brand_green">#FF08FF08</color>   <!-- accent + pill/button text + glyphs -->

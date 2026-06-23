@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Static widget-picker preview (RemoteViews-compatible) mirroring the live Glance widget.
+     Android 12+ renders this scalable layout in the picker; previewImage is the older fallback. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+    android:background="@drawable/widget_shell_bg"
+    android:padding="@dimen/widget_padding">
+
+    <!-- "Ask Claude…" pill -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/control_height"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/widget_pill_bg"
+        android:paddingStart="@dimen/pill_pad_h"
+        android:paddingEnd="@dimen/pill_pad_h">
+
+        <ImageView
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:src="@drawable/cc_logo"
+            android:importantForAccessibility="no" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/pill_hint"
+            android:textColor="@color/brand_green"
+            android:textSize="@dimen/text_pill" />
+    </LinearLayout>
+
+    <!-- Chat / Code button row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/control_height"
+        android:layout_marginTop="@dimen/gap_pill_row"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/widget_button_bg">
+            <ImageView
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:src="@drawable/ic_chat"
+                android:importantForAccessibility="no" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/label_chat"
+                android:textColor="@color/brand_green"
+                android:textSize="@dimen/text_label"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/gap_buttons"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/widget_button_bg">
+            <ImageView
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:src="@drawable/ic_code"
+                android:importantForAccessibility="no" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/label_code"
+                android:textColor="@color/brand_green"
+                android:textSize="@dimen/text_label"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

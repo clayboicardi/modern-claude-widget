@@ -30,14 +30,22 @@ This widget is rendered with **Jetpack Glance**, which compiles to Android **Rem
 - Provide **exact hex colors**, **corner radii (dp)**, **padding (dp)**, font sizes (sp), and the **icon style** you want (outline vs filled, stroke weight).
 - Keep icons original (do not reproduce Anthropic's or any brand's marks).
 
-## Current palette (starting point)
+## Current palette & geometry — source of truth: `app/src/main/res/values/`
+
+The shipped look is the Clayboicardi-brand reskin: blue-black surfaces, purple→green
+gradients, phosphor-green text/glyphs, CC logo in the pill. Exact values live in
+[`colors.xml`](app/src/main/res/values/colors.xml) and
+[`dimens.xml`](app/src/main/res/values/dimens.xml). Because Glance has no gradient modifier,
+the gradients are **layer-list shape drawables** (`widget_shell_bg` / `widget_pill_bg` /
+`widget_button_bg`) applied as `ImageProvider` backgrounds — edit the `grad_*` alpha bytes in
+`colors.xml` to retune them.
 
 | Token | Hex |
 |---|---|
-| Container | `#1C1C1E` |
-| Input pill | `#2C2C2E` |
-| Icon button bg | `#3A3A3C` |
-| Text / icons | `#ECECEC` |
-| Muted (pill hint) | `#8E8E93` |
+| Shell base | `#0D1019` |
+| Pill base | `#161B27` |
+| Button base | `#222A3A` |
+| Text / glyphs (brand green) | `#08FF08` |
+| Brand purple | `#47007D` |
 
-Container corner radius 28dp · pill 22dp · icon buttons 16dp · container padding 12dp.
+Geometry: container radius 28dp · pill 22dp · buttons 16dp · padding 12dp · ~168dp tall.
