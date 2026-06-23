@@ -24,3 +24,15 @@ All candidates resolve through `com.anthropic.claude/.deeplink.DeepLinkActivity`
 ## Extension notes (validated, not shipped)
 
 - `claude://code/new` opens the Code **task** composer → the spec's `NEW_CODE` extension hook is real and works. A prefilled task `claude://code/new?q=<url-encoded>` is plausible; the `q=` encoder already exists in `LaunchUri`.
+
+## Launch-flag probe — re-navigation when Claude is already running (2026-06-21)
+
+Bug found in real use: with Claude already running (backgrounded on, say, the Code page), tapping a widget button just resumed the existing task on its current page — the deep link was ignored. Probed by force-starting Claude on `claude://code`, pressing Home, then firing `claude://new` with different intent flags:
+
+| Flags (`am start -f`) | Result |
+|---|---|
+| `NEW_TASK` (`0x10000000`) | ❌ stayed on the Code page (bug) |
+| `NEW_TASK \| CLEAR_TOP` (`0x14000000`) | ❌ still Code — Claude does not re-route a re-delivered intent into an existing task |
+| `NEW_TASK \| CLEAR_TASK` (`0x10008000`) | ✅ new chat composer |
+
+**Decision:** `ViewUri` launches use `FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK`. Claude only re-runs its deep-link routing on a fresh (cleared) task, and clearing also gives the launcher the right semantics — each button deterministically lands on its surface. Confirmed end-to-end via the widget on-device.

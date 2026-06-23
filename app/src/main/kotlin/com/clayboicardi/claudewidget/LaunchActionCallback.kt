@@ -35,11 +35,16 @@ class LaunchActionCallback : ActionCallback {
 
     private fun launch(context: Context, attempt: LaunchAttempt): Boolean = try {
         when (attempt) {
+            // CLEAR_TASK is required, not just NEW_TASK: when Claude is already running, a
+            // bare NEW_TASK (or NEW_TASK|CLEAR_TOP) just resumes the existing task on whatever
+            // page it was on — the deep link is ignored. Only clearing the task makes Claude
+            // re-run its deep-link routing, so each button deterministically lands on its
+            // surface. Verified on-device (Pixel 10 Pro XL / API 37): see docs/route-probe.md.
             is LaunchAttempt.ViewUri -> start(
                 context,
                 Intent(Intent.ACTION_VIEW, Uri.parse(attempt.uri))
                     .setPackage(attempt.packageName)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK),
             )
 
             LaunchAttempt.ClaudeHome -> {
