@@ -6,6 +6,10 @@ A ChatGPT-style Android home-screen widget that deep-links straight into the [Cl
 
 > **Disclaimer — unofficial.** This is an independent, community project. It is **not affiliated with, endorsed by, or sponsored by Anthropic.** "Claude" is a trademark of Anthropic, PBC. All widget icons are original and do not reproduce Anthropic's (or any third party's) marks. The widget only launches the official Claude app through public deep links — it ships no Anthropic code, assets, or credentials.
 
+## Screenshot
+
+<img src="docs/screenshot.png" alt="Modern Claude Widget on an Android home screen — a dark rounded container with a blue-black-to-green gradient, an 'Ask Claude…' pill, and Chat / Code buttons in phosphor green" width="480">
+
 ## What it does
 
 | Tap | Opens |
