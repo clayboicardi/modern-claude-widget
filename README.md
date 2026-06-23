@@ -1,5 +1,7 @@
 # Modern Claude Widget
 
+[![CI](https://github.com/clayboicardi/modern-claude-widget/actions/workflows/ci.yml/badge.svg)](https://github.com/clayboicardi/modern-claude-widget/actions/workflows/ci.yml)
+
 A ChatGPT-style Android home-screen widget that deep-links straight into the [Claude](https://claude.ai) app. Two buttons — **Chat** and **Code** — plus an "Ask Claude…" pill that opens a fresh conversation. It's a pure deep-link launcher: **no backend, no API key, no `INTERNET` permission.**
 
 > **Disclaimer — unofficial.** This is an independent, community project. It is **not affiliated with, endorsed by, or sponsored by Anthropic.** "Claude" is a trademark of Anthropic, PBC. All widget icons are original and do not reproduce Anthropic's (or any third party's) marks. The widget only launches the official Claude app through public deep links — it ships no Anthropic code, assets, or credentials.
