@@ -53,9 +53,9 @@ private fun destClick(destId: String): Action =
 /**
  * Clayboicardi-brand reskin: blue-black shell with purple->green gradients, phosphor-green
  * text/glyphs, CC logo in the pill. Glance has no gradient modifier, so gradients ship as
- * layer-list shape drawables applied via ImageProvider backgrounds (corners baked in for
- * pre-API-31 clipping; .cornerRadius() kept as belt-and-suspenders on 31+). Launch wiring is
- * unchanged — only the visuals changed.
+ * layer-list shape drawables applied via ImageProvider backgrounds. Corners are baked into
+ * the drawables (the picker preview and loading placeholder reuse them); .cornerRadius()
+ * additionally clips the content and tap ripple to the same shape.
  */
 @Composable
 internal fun ClaudeWidgetContent() {

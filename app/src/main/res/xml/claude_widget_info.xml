@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- previewLayout is the scalable Android 12+ picker preview (see res/layout/widget_preview.xml).
-     previewImage (a rendered screenshot) can be added as the pre-12 fallback. -->
+<!-- previewLayout is the scalable widget-picker preview (see res/layout/widget_preview.xml).
+     No previewImage: that is only the pre-Android-12 fallback, and minSdk is 31. -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="250dp"
     android:minHeight="@dimen/widget_height"

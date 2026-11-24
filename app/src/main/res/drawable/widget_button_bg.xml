@@ -3,8 +3,6 @@
   Chat / Code button background.
   Web source: linear-gradient(135deg, #47007D @ 74%, #08FF08 @ 11%) over #222A3A.
   Android angle 315 == CSS 135deg. Corners 16dp.
-  For the pressed state, swap the base to @color/ink_600 (see button_bg_pressed
-  or use a <selector> if you wire stateful backgrounds).
 -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>

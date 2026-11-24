@@ -2,14 +2,14 @@
 <!--
   Widget shell background. Glance/RemoteViews CANNOT render CSS-style gradients
   via a modifier, so the gradient is baked into this shape drawable and applied
-  as an ImageProvider background (see ClaudeWidgetContent.kt).
+  as an ImageProvider background (see ClaudeWidget.kt).
 
   Web source (design system):
     radial top-left  : #47007D @ 58%  ->  transparent (58% of the box)
     radial bottom-rt : #08FF08 @ 26%  ->  transparent (55% of the box)
     base fill        : #0D1019
-  Corners 28dp baked in so it clips correctly below Android 12 (where the
-  Glance .cornerRadius() modifier is unavailable).
+  Corners 28dp are baked into the shape, so the widget-picker preview and the loading
+  placeholder (plain layouts, no Glance .cornerRadius()) get the same rounded shell.
 -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 

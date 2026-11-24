@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Static widget-picker preview (RemoteViews-compatible) mirroring the live Glance widget.
-     Android 12+ renders this scalable layout in the picker; previewImage is the older fallback. -->
+     Keep it in step with ClaudeWidget.kt: same drawables, dimens and strings. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

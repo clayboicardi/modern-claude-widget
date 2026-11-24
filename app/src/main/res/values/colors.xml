@@ -10,11 +10,10 @@
     <color name="ink_850">#FF0D1019</color>   <!-- widget shell base    -->
     <color name="ink_800">#FF161B27</color>   <!-- pill base            -->
     <color name="ink_700">#FF222A3A</color>   <!-- button base          -->
-    <color name="ink_600">#FF2B3446</color>   <!-- button pressed        -->
 
-    <!-- Brand accents -->
+    <!-- Brand accents. Brand purple (#47007D) has no opaque entry: it only ever appears
+         as the translucent gradient stops below. -->
     <color name="brand_green">#FF08FF08</color>   <!-- accent + pill/button text + glyphs -->
-    <color name="brand_purple">#FF47007D</color>  <!-- brand / CTA -->
 
     <!-- Translucent gradient stops (color @ alpha) — see drawables.
          Brightened a touch from the handoff defaults (Clay feedback 2026-06-21). -->
