@@ -9,10 +9,11 @@ on:
 permissions:
   contents: read
 
-# A newer push to the same branch or PR replaces the run in progress.
+# A newer push to a pull request replaces its run in progress. Runs on main are never
+# cancelled, so every commit there gets a result.
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -20,6 +21,14 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
+
+      # The wrapper JAR is a binary that runs before anything else. Check it against the
+      # checksum Gradle publishes for the version the wrapper properties pin.
+      - name: Validate Gradle wrapper JAR
+        run: |
+          version=$(sed -n 's#.*/gradle-\(.*\)-bin\.zip#\1#p' gradle/wrapper/gradle-wrapper.properties)
+          expected=$(curl -fsSL "https://services.gradle.org/distributions/gradle-${version}-wrapper.jar.sha256")
+          echo "${expected}  gradle/wrapper/gradle-wrapper.jar" | sha256sum --check
 
       # Also restores and saves the Gradle caches (wrapper distribution + dependencies).
       - name: Set up JDK 21
@@ -36,6 +45,14 @@ jobs:
         run: |
           yes | sdkmanager --licenses >/dev/null 2>&1 || true
           sdkmanager "platforms;android-37.0" "build-tools;37.0.0" "platform-tools"
+
+      # Robolectric downloads its Android runtime (about 240 MB) into ~/.m2 at test time,
+      # outside the Gradle caches above.
+      - name: Cache Robolectric runtime
+        uses: actions/cache@v6
+        with:
+          path: ~/.m2/repository/org/robolectric
+          key: robolectric-${{ hashFiles('gradle/libs.versions.toml') }}
 
       - name: Lint, test, assemble
         run: ./gradlew lint test assembleDebug --no-daemon --stacktrace
