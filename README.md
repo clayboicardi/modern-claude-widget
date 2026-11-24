@@ -36,7 +36,7 @@ ViewUri(claude://…)  →  Claude app launcher  →  Play Store (market:// then
 - Every `Intent` is built from the registry — a `Parcelable` intent is never forwarded from widget extras (intent-redirection hardening).
 - Deep links are pinned to Claude's package, so another app that registers `claude://` can't intercept a tap.
 - Unknown/missing actions **fail closed** to simply opening Claude, never crash.
-- The app's own manifest requests no permissions. Glance's WorkManager dependency adds four ordinary ones (wake lock, network *state*, boot completed, foreground service); `INTERNET` is not among them, and a test fails the build if that ever changes.
+- The app's own manifest requests no permissions. Glance's WorkManager dependency adds four ordinary ones (wake lock, network *state*, boot completed, foreground service), and AndroidX Core adds one private signature-level permission that only this app can hold. `INTERNET` is not among them, and a test fails the build if the set ever changes.
 - Routes were validated on-device against the real Claude app; see [`docs/route-probe.md`](docs/route-probe.md).
 
 ## Build & run
