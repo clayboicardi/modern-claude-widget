@@ -1,5 +1,9 @@
 package com.clayboicardi.claudewidget
 
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
+import androidx.glance.action.actionParametersOf
+import androidx.glance.appwidget.testing.unit.hasRunCallbackClickAction
 import androidx.glance.appwidget.testing.unit.runGlanceAppWidgetUnitTest
 import androidx.glance.testing.unit.hasClickAction
 import androidx.glance.testing.unit.hasContentDescriptionEqualTo
@@ -18,6 +22,43 @@ class ClaudeWidgetUiTest {
         onAllNodes(hasClickAction()).assertCountEquals(3)
 
         onNode(hasText("Ask Claude…")).assertExists()
+        onNode(hasContentDescriptionEqualTo("Chat")).assertExists()
+        onNode(hasContentDescriptionEqualTo("Code")).assertExists()
+    }
+
+    // Each target must run LaunchActionCallback with its own destination id. A copy-paste
+    // slip that pointed Code at "chat" would still pass the click-count test above.
+    @Test
+    fun each_target_routes_to_its_own_destination() = runGlanceAppWidgetUnitTest {
+        provideComposable { ClaudeWidgetContent() }
+
+        fun routesTo(action: ClaudeAction) =
+            hasRunCallbackClickAction<LaunchActionCallback>(actionParametersOf(ActionKeys.DEST to action.id))
+
+        // Pill + Chat button both open a new chat; only the Code button opens Code.
+        onAllNodes(routesTo(ClaudeAction.CHAT)).assertCountEquals(2)
+        onAllNodes(routesTo(ClaudeAction.CODE)).assertCountEquals(1)
+        onNode(hasText("Ask Claude…") and routesTo(ClaudeAction.CHAT)).assertDoesNotExist()
+    }
+
+    @Test
+    fun standard_width_shows_text_labels() = runGlanceAppWidgetUnitTest {
+        setAppWidgetSize(DpSize(250.dp, 168.dp))
+        provideComposable { ClaudeWidgetContent() }
+
+        onNode(hasText("Chat")).assertExists()
+        onNode(hasText("Code")).assertExists()
+    }
+
+    @Test
+    fun compact_width_hides_labels_but_keeps_all_three_targets() = runGlanceAppWidgetUnitTest {
+        setAppWidgetSize(DpSize(180.dp, 140.dp))
+        provideComposable { ClaudeWidgetContent() }
+
+        onNode(hasText("Chat")).assertDoesNotExist()
+        onNode(hasText("Code")).assertDoesNotExist()
+        onAllNodes(hasClickAction()).assertCountEquals(3)
+        // Icons-only buttons still announce themselves to screen readers.
         onNode(hasContentDescriptionEqualTo("Chat")).assertExists()
         onNode(hasContentDescriptionEqualTo("Code")).assertExists()
     }

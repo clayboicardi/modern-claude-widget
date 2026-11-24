@@ -7,6 +7,7 @@ kotlin = "2.4.21"
 glance = "1.2.0"
 coreKtx = "1.19.1"
 junit = "4.13.2"
+robolectric = "4.18.1"
 
 [libraries]
 glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
@@ -16,6 +17,7 @@ glance-appwidget-testing = { group = "androidx.glance", name = "glance-appwidget
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 
 [plugins]
 # No kotlin-android plugin: AGP 9 provides built-in Kotlin support (applying the

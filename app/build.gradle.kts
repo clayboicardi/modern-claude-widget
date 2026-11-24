@@ -39,6 +39,22 @@ android {
             // glance-appwidget-testing's unit environment touches android.os.Bundle; let the
             // stub android.jar return defaults instead of throwing "not mocked".
             isReturnDefaultValues = true
+            // Robolectric tests read the merged manifest and resources.
+            isIncludeAndroidResources = true
+            all {
+                // Robolectric needs these on JDK 17+: https://robolectric.org/getting-started/
+                it.jvmArgs(
+                    "--add-opens=java.base/java.lang=ALL-UNNAMED",
+                    "--add-opens=java.base/java.util=ALL-UNNAMED",
+                    "--add-opens=java.base/java.io=ALL-UNNAMED",
+                    "--add-opens=java.base/java.net=ALL-UNNAMED",
+                    "--add-opens=java.base/java.security=ALL-UNNAMED",
+                    "--add-opens=java.base/java.text=ALL-UNNAMED",
+                    "--add-opens=java.base/jdk.internal.access=ALL-UNNAMED",
+                    "--add-opens=java.desktop/java.awt.font=ALL-UNNAMED",
+                    "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+                )
+            }
         }
     }
 }
@@ -54,6 +70,7 @@ dependencies {
     implementation(libs.glance.appwidget)
     implementation(libs.glance.material3)
     testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
     testImplementation(libs.glance.testing)
     testImplementation(libs.glance.appwidget.testing)
 }
