@@ -86,9 +86,12 @@ internal fun ClaudeWidgetContent() {
                 modifier = GlanceModifier.size(22.dp),
             )
             Spacer(GlanceModifier.width(8.dp))
+            // One line always: at large font scales on a 2-cell-wide widget the hint would
+            // otherwise wrap and be cut off by the fixed-height pill.
             Text(
                 text = "Ask Claude…",
                 style = TextStyle(color = BrandGreen, fontSize = 15.sp),
+                maxLines = 1,
             )
         }
 
@@ -130,6 +133,7 @@ private fun LaunchButton(
             Text(
                 text = label,
                 style = TextStyle(color = BrandGreen, fontSize = 14.sp, fontWeight = FontWeight.Medium),
+                maxLines = 1,
             )
         }
     }
