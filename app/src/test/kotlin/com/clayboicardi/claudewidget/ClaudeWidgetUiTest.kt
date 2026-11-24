@@ -42,7 +42,25 @@ class ClaudeWidgetUiTest {
         // Pill + Chat button both open a new chat; only the Code button opens Code.
         onAllNodes(routesTo(ClaudeAction.CHAT)).assertCountEquals(2)
         onAllNodes(routesTo(ClaudeAction.CODE)).assertCountEquals(1)
-        onNode(hasText("Ask Claude…") and routesTo(ClaudeAction.CHAT)).assertDoesNotExist()
+    }
+
+    // README and DESIGN state the breakpoint as 220dp; pin both sides of it.
+    @Test
+    fun labels_appear_at_exactly_220dp_wide() = runGlanceAppWidgetUnitTest {
+        setAppWidgetSize(DpSize(220.dp, 168.dp))
+        provideComposable { ClaudeWidgetContent() }
+
+        onNode(hasText("Chat")).assertExists()
+        onNode(hasText("Code")).assertExists()
+    }
+
+    @Test
+    fun labels_are_hidden_just_below_220dp_wide() = runGlanceAppWidgetUnitTest {
+        setAppWidgetSize(DpSize(219.dp, 168.dp))
+        provideComposable { ClaudeWidgetContent() }
+
+        onNode(hasText("Chat")).assertDoesNotExist()
+        onNode(hasText("Code")).assertDoesNotExist()
     }
 
     @Test
