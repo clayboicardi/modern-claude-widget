@@ -4,7 +4,7 @@ agp = "9.5.2"
 # KGP on the buildscript classpath (the documented way to raise it), and the Compose
 # compiler plugin uses the same version so the two always match.
 kotlin = "2.4.21"
-glance = "1.1.1"
+glance = "1.2.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 
