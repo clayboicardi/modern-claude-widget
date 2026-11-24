@@ -33,7 +33,7 @@ class LaunchActionCallback : ActionCallback {
         }
     }
 
-    private fun launch(context: Context, attempt: LaunchAttempt): Boolean = try {
+    private fun launch(context: Context, attempt: LaunchAttempt): Boolean =
         when (attempt) {
             // CLEAR_TASK is required, not just NEW_TASK: when Claude is already running, a
             // bare NEW_TASK (or NEW_TASK|CLEAR_TOP) just resumes the existing task on whatever
@@ -56,11 +56,6 @@ class LaunchActionCallback : ActionCallback {
 
             LaunchAttempt.PlayStore -> launchPlayStore(context)
         }
-    } catch (e: ActivityNotFoundException) {
-        false
-    } catch (e: SecurityException) {
-        false
-    }
 
     /** market:// first, then the https Play Store URL (browser fallback). */
     private fun launchPlayStore(context: Context): Boolean {
@@ -77,10 +72,20 @@ class LaunchActionCallback : ActionCallback {
         return start(context, web)
     }
 
+    /**
+     * Starts one Intent and reports whether it started. Each start handles its own failures,
+     * so a refused attempt (no handler, or a SecurityException from a non-exported or
+     * permission-guarded target) always falls through to the next one.
+     *
+     * A launch the system blocks as a background activity start does NOT throw, so it can't
+     * be detected here; that path is verified on-device (docs/route-probe.md).
+     */
     private fun start(context: Context, intent: Intent): Boolean = try {
         context.startActivity(intent)
         true
     } catch (e: ActivityNotFoundException) {
+        false
+    } catch (e: SecurityException) {
         false
     }
 }

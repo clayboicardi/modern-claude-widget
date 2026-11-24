@@ -182,4 +182,15 @@ class LaunchActionCallbackTest {
 
         assertEquals(Intent.ACTION_MAIN, device.started.single().action)
     }
+
+    @Test
+    fun `a denied Play Store app link still falls through to the web page`() {
+        val device = FakeDevice(app, resolves = { true }, denies = { isClaudeLink(it) || isMarket(it) })
+        tap(device, "chat")
+
+        assertEquals(
+            "https://play.google.com/store/apps/details?id=$claude",
+            device.started.single().dataString,
+        )
+    }
 }
