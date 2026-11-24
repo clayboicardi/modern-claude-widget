@@ -123,9 +123,11 @@ private fun LaunchButton(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         // Glyph is green-tinted inside the vector (android:tint), so no per-call tint needed.
+        // The icon speaks for the button only when it is the whole button. Next to a visible
+        // label it is decorative; describing it too makes a screen reader say "Chat, Chat".
         Image(
             provider = ImageProvider(iconRes),
-            contentDescription = label,
+            contentDescription = if (showLabel) null else label,
             modifier = GlanceModifier.size(22.dp),
         )
         if (showLabel) {
