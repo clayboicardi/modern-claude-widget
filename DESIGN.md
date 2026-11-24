@@ -4,7 +4,8 @@ This widget is rendered with **Jetpack Glance**, which compiles to Android **Rem
 
 ## Canvas
 
-- Home-screen widget. Sizes: **Compact ≈ 2×2 cells** (icons only) and **Standard ≈ 4×2 cells** (icons + text labels). Resizable between.
+- Home-screen widget. Sizes: **Compact ≈ 2×2 cells** (icons only) and **Standard ≈ 4×2 cells** (icons + text labels). Resizable between; labels appear at 220dp wide and up.
+- Text is limited to **one line** and ellipsizes. At the compact size with a large system font the hint shortens ("Ask Cla…") rather than wrapping out of the pill, so keep copy short.
 - Current structure: rounded **container** → an **"Ask Claude…" input pill** (opens a new chat) → a **row of two icon buttons** (Chat 💬, Code `</>`). The pill and each button are independent tap targets (**≥ 48dp**).
 
 ## ✅ Glance supports
@@ -49,3 +50,7 @@ the gradients are **layer-list shape drawables** (`widget_shell_bg` / `widget_pi
 | Brand purple | `#47007D` |
 
 Geometry: container radius 28dp · pill 22dp · buttons 16dp · padding 12dp · ~168dp tall.
+
+Three files draw the same design and must stay in step: `ClaudeWidget.kt` (the live widget),
+`res/layout/widget_preview.xml` (the widget-picker preview) and `res/layout/widget_loading.xml`
+(the placeholder shown before the first render).
