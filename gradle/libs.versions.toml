@@ -1,5 +1,5 @@
 [versions]
-agp = "9.2.0"
+agp = "9.5.2"
 # Must match the Kotlin Gradle plugin AGP 9.2 bundles for built-in Kotlin, so the
 # Compose compiler plugin aligns with the built-in Kotlin compiler.
 kotlin = "2.2.10"
