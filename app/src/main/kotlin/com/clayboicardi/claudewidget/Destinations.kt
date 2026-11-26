@@ -19,7 +19,7 @@ data class Destination(
 object Destinations {
     const val CLAUDE_PKG = "com.anthropic.claude"
 
-    /** Code opens the Code / Remote Control list — the documented mobile route. */
+    /** Code opens the Code session list: the documented mobile route, re-probed 2026-11-26. */
     private val code = Destination(
         id = ClaudeAction.CODE.id,
         label = ClaudeAction.CODE.defaultLabel,
@@ -31,14 +31,16 @@ object Destinations {
         ),
     )
 
-    // Chat opens a new conversation composer in one tap (keyboard up) — validated on a
-    // Pixel 10 Pro XL / API 37 against Claude 1.260611.30. See docs/route-probe.md.
+    // Chat opens a new conversation composer in one tap (keyboard up). Probed on a Pixel 10
+    // Pro XL, Android 17 QPR2, against Claude 1.261123.19 (2026-11-26). The shorter
+    // claude://new worked in June 2026 but by November landed on the Code list instead.
+    // This form is the one Anthropic documents (for Desktop). See docs/route-probe.md.
     private val chat = Destination(
         id = ClaudeAction.CHAT.id,
         label = "Chat",
         confidence = RouteConfidence.PROBED,
         attempts = listOf(
-            LaunchAttempt.ViewUri("claude://new", CLAUDE_PKG),
+            LaunchAttempt.ViewUri("claude://claude.ai/new", CLAUDE_PKG),
             LaunchAttempt.ClaudeHome,
             LaunchAttempt.PlayStore,
         ),

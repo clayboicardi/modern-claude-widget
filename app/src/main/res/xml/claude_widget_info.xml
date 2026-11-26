@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- previewLayout is the scalable Android 12+ picker preview (see res/layout/widget_preview.xml).
-     previewImage (a rendered screenshot) can be added as the pre-12 fallback. -->
+<!-- Two previews, because launchers differ:
+     - previewLayout (res/layout/widget_preview.xml) is the scalable preview the stock
+       Android 12+ picker uses.
+     - previewImage is a PNG render of the widget for launchers that only load the image.
+       Kvaesitso is one: without it the widget appears in its picker as a bare icon.
+     Regenerate the image when the look changes (see DESIGN.md). -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="250dp"
     android:minHeight="@dimen/widget_height"
@@ -13,4 +17,5 @@
     android:widgetCategory="home_screen"
     android:description="@string/widget_description"
     android:initialLayout="@layout/widget_loading"
+    android:previewImage="@drawable/widget_preview_image"
     android:previewLayout="@layout/widget_preview" />

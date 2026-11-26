@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Shown for the moment between the widget being placed and Glance's first render.
+     Uses the real shell background so the placeholder already looks like the widget. -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1F1F1F" />
+    android:background="@drawable/widget_shell_bg" />

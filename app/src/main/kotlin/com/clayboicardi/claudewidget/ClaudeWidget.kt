@@ -15,7 +15,7 @@ import androidx.glance.action.actionParametersOf
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.SizeMode
-import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.action.actionStartActivity
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
@@ -45,17 +45,17 @@ class ClaudeWidget : GlanceAppWidget() {
     }
 }
 
-/** A click action routed through [LaunchActionCallback]'s ordered-attempt registry walk
- *  (preserves fail-closed + Play Store fallback + the verified BAL launch). */
+/** A tap starts [LaunchActivity] with the button's destination id; that activity runs the
+ *  ordered-attempt registry walk (fail-closed + Play Store fallback) and finishes. */
 private fun destClick(destId: String): Action =
-    actionRunCallback<LaunchActionCallback>(actionParametersOf(ActionKeys.DEST to destId))
+    actionStartActivity<LaunchActivity>(actionParametersOf(ActionKeys.DEST to destId))
 
 /**
  * Clayboicardi-brand reskin: blue-black shell with purple->green gradients, phosphor-green
  * text/glyphs, CC logo in the pill. Glance has no gradient modifier, so gradients ship as
- * layer-list shape drawables applied via ImageProvider backgrounds (corners baked in for
- * pre-API-31 clipping; .cornerRadius() kept as belt-and-suspenders on 31+). Launch wiring is
- * unchanged — only the visuals changed.
+ * layer-list shape drawables applied via ImageProvider backgrounds. Corners are baked into
+ * the drawables (the picker preview and loading placeholder reuse them); .cornerRadius()
+ * additionally clips the content and tap ripple to the same shape.
  */
 @Composable
 internal fun ClaudeWidgetContent() {
@@ -86,9 +86,12 @@ internal fun ClaudeWidgetContent() {
                 modifier = GlanceModifier.size(22.dp),
             )
             Spacer(GlanceModifier.width(8.dp))
+            // One line always: at large font scales on a 2-cell-wide widget the hint would
+            // otherwise wrap and be cut off by the fixed-height pill.
             Text(
                 text = "Ask Claude…",
                 style = TextStyle(color = BrandGreen, fontSize = 15.sp),
+                maxLines = 1,
             )
         }
 
@@ -120,9 +123,11 @@ private fun LaunchButton(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         // Glyph is green-tinted inside the vector (android:tint), so no per-call tint needed.
+        // The icon speaks for the button only when it is the whole button. Next to a visible
+        // label it is decorative; describing it too makes a screen reader say "Chat, Chat".
         Image(
             provider = ImageProvider(iconRes),
-            contentDescription = label,
+            contentDescription = if (showLabel) null else label,
             modifier = GlanceModifier.size(22.dp),
         )
         if (showLabel) {
@@ -130,6 +135,7 @@ private fun LaunchButton(
             Text(
                 text = label,
                 style = TextStyle(color = BrandGreen, fontSize = 14.sp, fontWeight = FontWeight.Medium),
+                maxLines = 1,
             )
         }
     }
