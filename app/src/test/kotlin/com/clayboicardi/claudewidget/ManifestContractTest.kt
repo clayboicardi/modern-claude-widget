@@ -1,6 +1,7 @@
 package com.clayboicardi.claudewidget
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import org.junit.Assert.assertEquals
@@ -65,5 +66,20 @@ class ManifestContractTest {
                 .mapTo(this) { it.name }
         }
         assertEquals(listOf(ClaudeWidgetReceiver::class.java.name), unguarded)
+    }
+
+    @Test
+    fun `the launch activity is private and stays out of the launcher and recents`() {
+        val launch = packageInfo(PackageManager.GET_ACTIVITIES).activities.orEmpty()
+            .single { it.name == LaunchActivity::class.java.name }
+        assertFalse("only the widget's own PendingIntent may start it", launch.exported)
+        assertEquals(
+            ActivityInfo.FLAG_EXCLUDE_FROM_RECENTS,
+            launch.flags and ActivityInfo.FLAG_EXCLUDE_FROM_RECENTS,
+        )
+        assertEquals(android.R.style.Theme_NoDisplay, launch.themeResource)
+
+        val launcherEntry = context.packageManager.getLaunchIntentForPackage(context.packageName)
+        assertEquals("the app must not appear in the app drawer", null, launcherEntry)
     }
 }

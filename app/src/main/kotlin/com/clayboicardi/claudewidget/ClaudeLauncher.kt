@@ -4,9 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
-import androidx.glance.GlanceId
 import androidx.glance.action.ActionParameters
-import androidx.glance.appwidget.action.ActionCallback
 
 object ActionKeys {
     val DEST = ActionParameters.Key<String>("dest")
@@ -15,31 +13,28 @@ object ActionKeys {
 /**
  * Walks a destination's ordered [LaunchAttempt]s and starts the first that resolves.
  *
- * PendingIntent identity is guaranteed by Glance keying each `actionRunCallback` on its
- * distinct [ActionKeys.DEST] parameter — we never mutate the route URI to force uniqueness
- * (that would break the Claude app's intent matching). Every Intent is built here from the
- * registry; we never forward a Parcelable Intent passed in extras.
+ * Every Intent is built here from the registry, keyed by a plain string id. Nothing received
+ * from outside is ever forwarded as an Intent, and an unknown id fails closed to "open Claude".
+ *
+ * Call this from an Activity context ([LaunchActivity]). Starting activities from the widget's
+ * broadcast instead is blocked as a background activity launch on some launchers; see
+ * docs/route-probe.md (November 2026).
  */
-class LaunchActionCallback : ActionCallback {
+object ClaudeLauncher {
 
-    override suspend fun onAction(
-        context: Context,
-        glanceId: GlanceId,
-        parameters: ActionParameters,
-    ) {
-        val destination = Destinations.byIdOrFallback(parameters[ActionKeys.DEST])
-        for (attempt in destination.attempts) {
-            if (launch(context, attempt)) return
-        }
+    /** @return true if some attempt started. */
+    fun launch(context: Context, destId: String?): Boolean {
+        val destination = Destinations.byIdOrFallback(destId)
+        return destination.attempts.any { launch(context, it) }
     }
 
     private fun launch(context: Context, attempt: LaunchAttempt): Boolean =
         when (attempt) {
-            // CLEAR_TASK is required, not just NEW_TASK: when Claude is already running, a
-            // bare NEW_TASK (or NEW_TASK|CLEAR_TOP) just resumes the existing task on whatever
-            // page it was on — the deep link is ignored. Only clearing the task makes Claude
-            // re-run its deep-link routing, so each button deterministically lands on its
-            // surface. Verified on-device (Pixel 10 Pro XL / API 37): see docs/route-probe.md.
+            // NEW_TASK|CLEAR_TASK gives each button the same result every time: Claude starts
+            // on that surface whatever it was showing before. In June 2026 it was also the only
+            // way to make a running Claude follow the link; by November Claude re-navigated
+            // with NEW_TASK alone, but clearing still works and is verified on both app
+            // generations. See docs/route-probe.md.
             is LaunchAttempt.ViewUri -> start(
                 context,
                 Intent(Intent.ACTION_VIEW, attempt.uri.toUri())
@@ -78,7 +73,7 @@ class LaunchActionCallback : ActionCallback {
      * permission-guarded target) always falls through to the next one.
      *
      * A launch the system blocks as a background activity start does NOT throw, so it can't
-     * be detected here; that path is verified on-device (docs/route-probe.md).
+     * be detected here; that is why launches are verified on a device (docs/route-probe.md).
      */
     private fun start(context: Context, intent: Intent): Boolean = try {
         context.startActivity(intent)

@@ -15,7 +15,7 @@ import androidx.glance.action.actionParametersOf
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.SizeMode
-import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.action.actionStartActivity
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
@@ -45,10 +45,10 @@ class ClaudeWidget : GlanceAppWidget() {
     }
 }
 
-/** A click action routed through [LaunchActionCallback]'s ordered-attempt registry walk
- *  (preserves fail-closed + Play Store fallback + the verified BAL launch). */
+/** A tap starts [LaunchActivity] with the button's destination id; that activity runs the
+ *  ordered-attempt registry walk (fail-closed + Play Store fallback) and finishes. */
 private fun destClick(destId: String): Action =
-    actionRunCallback<LaunchActionCallback>(actionParametersOf(ActionKeys.DEST to destId))
+    actionStartActivity<LaunchActivity>(actionParametersOf(ActionKeys.DEST to destId))
 
 /**
  * Clayboicardi-brand reskin: blue-black shell with purple->green gradients, phosphor-green

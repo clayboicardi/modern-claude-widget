@@ -6,10 +6,8 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.IntentFilter
-import androidx.glance.GlanceId
-import androidx.glance.action.actionParametersOf
-import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -24,14 +22,13 @@ import org.robolectric.Shadows.shadowOf
  * [FakeDevice] decides which Intents "exist" on the device.
  *
  * What this cannot cover: whether Claude lands on the right screen, and whether the system
- * allows the background activity launch. Those are on-device checks (docs/route-probe.md).
+ * allows the launch. Those are on-device checks (docs/route-probe.md).
  */
 @RunWith(RobolectricTestRunner::class)
-class LaunchActionCallbackTest {
+class ClaudeLauncherTest {
 
     private val claude = Destinations.CLAUDE_PKG
     private val app: Context = RuntimeEnvironment.getApplication()
-    private val glanceId = object : GlanceId {}
 
     /** Records every startActivity call; only Intents accepted by [resolves] start. */
     private class FakeDevice(
@@ -66,21 +63,18 @@ class LaunchActionCallbackTest {
         )
     }
 
-    private fun tap(device: FakeDevice, destId: String?) = runTest {
-        val params = if (destId == null) actionParametersOf() else actionParametersOf(ActionKeys.DEST to destId)
-        LaunchActionCallback().onAction(device, glanceId, params)
-    }
+    private fun tap(device: FakeDevice, destId: String?): Boolean = ClaudeLauncher.launch(device, destId)
 
     private val clearTask = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
     @Test
-    fun `chat tap opens claude new, pinned to Claude, on a cleared task`() {
+    fun `chat tap opens a new chat, pinned to Claude, on a cleared task`() {
         val device = FakeDevice(app, resolves = ::isClaudeLink)
         tap(device, "chat")
 
         val intent = device.started.single()
         assertEquals(Intent.ACTION_VIEW, intent.action)
-        assertEquals("claude://new", intent.dataString)
+        assertEquals("claude://claude.ai/new", intent.dataString)
         assertEquals(claude, intent.`package`)
         assertNull("the target stays implicit within Claude's package", intent.component)
         assertEquals(clearTask, intent.flags and clearTask)
@@ -131,7 +125,7 @@ class LaunchActionCallbackTest {
         assertEquals("market://details?id=$claude", intent.dataString)
         assertTrue(intent.flags and Intent.FLAG_ACTIVITY_NEW_TASK != 0)
         // No launcher attempt is recorded: getLaunchIntentForPackage returns null first.
-        assertEquals(listOf("claude://new", "market://details?id=$claude"), device.attempted.map { it.dataString })
+        assertEquals(listOf("claude://claude.ai/new", "market://details?id=$claude"), device.attempted.map { it.dataString })
     }
 
     @Test
@@ -148,8 +142,9 @@ class LaunchActionCallbackTest {
     @Test
     fun `does nothing and does not throw when nothing can be started`() {
         val device = FakeDevice(app, resolves = { false })
-        tap(device, "chat")
+        val started = tap(device, "chat")
 
+        assertFalse(started)
         assertTrue(device.started.isEmpty())
         assertEquals(3, device.attempted.size) // deep link, market, https
     }

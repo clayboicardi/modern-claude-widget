@@ -3,10 +3,10 @@ package com.clayboicardi.claudewidget
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.glance.action.actionParametersOf
-import androidx.glance.appwidget.testing.unit.hasRunCallbackClickAction
 import androidx.glance.appwidget.testing.unit.runGlanceAppWidgetUnitTest
 import androidx.glance.testing.unit.hasClickAction
 import androidx.glance.testing.unit.hasContentDescriptionEqualTo
+import androidx.glance.testing.unit.hasStartActivityClickAction
 import androidx.glance.testing.unit.hasText
 import org.junit.Test
 
@@ -30,14 +30,15 @@ class ClaudeWidgetUiTest {
         onNode(hasText("Code")).assertExists()
     }
 
-    // Each target must run LaunchActionCallback with its own destination id. A copy-paste
-    // slip that pointed Code at "chat" would still pass the click-count test above.
+    // Each target must start LaunchActivity with its own destination id. A copy-paste slip
+    // that pointed Code at "chat" would still pass the click-count test above. It must be a
+    // start-activity action: a run-callback action is blocked on some launchers (Kvaesitso).
     @Test
     fun each_target_routes_to_its_own_destination() = runGlanceAppWidgetUnitTest {
         provideComposable { ClaudeWidgetContent() }
 
         fun routesTo(action: ClaudeAction) =
-            hasRunCallbackClickAction<LaunchActionCallback>(actionParametersOf(ActionKeys.DEST to action.id))
+            hasStartActivityClickAction<LaunchActivity>(actionParametersOf(ActionKeys.DEST to action.id))
 
         // Pill + Chat button both open a new chat; only the Code button opens Code.
         onAllNodes(routesTo(ClaudeAction.CHAT)).assertCountEquals(2)
