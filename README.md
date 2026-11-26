@@ -14,13 +14,13 @@ A ChatGPT-style Android home-screen widget that deep-links straight into the [Cl
 
 | Tap | Opens |
 |---|---|
-| **Ask Claude…** pill | A new conversation composer (`claude://new`) |
-| **Chat** | A new conversation composer (`claude://new`) |
+| **Ask Claude…** pill | A new conversation composer (`claude://claude.ai/new`) |
+| **Chat** | A new conversation composer (`claude://claude.ai/new`) |
 | **Code** | The Code / Remote Control list (`claude://code`) |
 
 If the Claude app isn't installed, the widget falls through to the Play Store listing.
 
-The Code routes are [documented by Anthropic](https://support.claude.com/en/articles/14898120-open-the-claude-mobile-app-with-a-link) and need Claude Code access on your account. `claude://new` is not documented; it is kept because it is verified on-device (see [`docs/route-probe.md`](docs/route-probe.md)).
+The Code routes are [documented by Anthropic](https://support.claude.com/en/articles/14898120-open-the-claude-mobile-app-with-a-link) and need Claude Code access on your account. The chat link is documented by Anthropic for Claude Desktop only; on Android it is used because it is verified on-device (see [`docs/route-probe.md`](docs/route-probe.md)). v1.0 used `claude://new`, which stopped opening a chat in later Claude versions.
 
 The official Claude app ships [its own widget](https://support.claude.com/en/articles/10534883-use-the-claude-widget-on-android) (new chat, camera, voice). This one exists for the one-tap **Code** entry and the look.
 
@@ -32,7 +32,7 @@ The UI never hard-codes a single intent. Each button looks up a `Destination` in
 ViewUri(claude://…)  →  Claude app launcher  →  Play Store (market:// then https)
 ```
 
-- Launches fire from an `actionRunCallback` (not `actionStartActivity`), keyed on a per-button parameter so each button keeps its own identity.
+- A tap starts `LaunchActivity`, a private activity that draws nothing: it reads which button was tapped, walks the list above and finishes. (v1.0 launched from a Glance `actionRunCallback` instead. Android blocked that as a background launch under some launchers, Kvaesitso among them, so taps did nothing there.)
 - Every `Intent` is built from the registry — a `Parcelable` intent is never forwarded from widget extras (intent-redirection hardening).
 - Deep links are pinned to Claude's package, so another app that registers `claude://` can't intercept a tap.
 - Unknown/missing actions **fail closed** to simply opening Claude, never crash.
@@ -43,7 +43,7 @@ ViewUri(claude://…)  →  Claude app launcher  →  Play Store (market:// then
 
 **Requirements:** JDK 17+, Android SDK with **API 37** platform + **Build-Tools 37**, a device/emulator on Android 12+ (minSdk 31). The Gradle wrapper pins Gradle 9.9.2 (checksum-verified); the build uses AGP 9.5.3 and Kotlin 2.4.21.
 
-**Android Studio:** open the project and let it sync. The app has no activity, so install it (`./gradlew installDebug`) rather than Run it. Then long-press the home screen → **Widgets** → **Claude Widget**.
+**Android Studio:** open the project and let it sync. The app has no launcher activity, so install it (`./gradlew installDebug`) rather than Run it. Then long-press the home screen → **Widgets** → **Claude Widget**.
 
 **Command line:**
 ```bash

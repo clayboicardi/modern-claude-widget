@@ -1,5 +1,9 @@
 # Claude deep-link route probe
 
+Two dated probes. The **June 2026** results come first and are kept as history; the
+[November 2026 probe](#november-2026-probe) below is the current one. Two June results no
+longer hold: `claude://new` stopped opening a chat, and `CLEAR_TASK` is no longer required.
+
 **Device:** Pixel 10 Pro XL (`mustang`), Android **17 / API 37**.
 **Claude app:** `com.anthropic.claude` — versionName **`1.260611.30`**, versionCode **`26061130`** (minSdk 32, targetSdk 36).
 **Date:** 2026-06-21.
@@ -102,6 +106,26 @@ START u0 {act=android.intent.action.VIEW dat=claude://code/... flg=0x10008000 pk
 | **Chat** | ✅ new chat composer, keyboard up | ✅ new chat composer, keyboard up |
 | **Ask Claude…** pill | ✅ new chat composer, keyboard up | not run |
 
+## Widget taps on the stock Pixel launcher (emulator)
+
+The phone runs Kvaesitso, so the stock launcher was checked on an emulator: API 37.0, Pixel
+launcher (`com.google.android.apps.nexuslauncher`), Claude not installed, v1.1.0 built from
+the branch head, 2026-11-26. Each of **Chat**, **Code** and the pill gave:
+
+```
+START u0 {dat=glance-action:/... cmp=com.clayboicardi.claudewidget/.LaunchActivity (has extras)} …
+  (realCallingUid=<Pixel launcher>) (BAL_ALLOW_VISIBLE_WINDOW [realCaller]) result code=0
+START u0 {act=android.intent.action.VIEW dat=claude://… flg=0x10008000 pkg=com.anthropic.claude} … result code=-91
+START u0 {act=android.intent.action.VIEW dat=market://details/... flg=0x10000000} … result code=-91
+START u0 {act=android.intent.action.VIEW dat=https://play.google.com/... cmp=com.android.chrome/…} …
+  (BAL_ALLOW_VISIBLE_WINDOW) result code=0
+```
+
+So the new tap path is allowed from the stock launcher too, and the not-installed fallback
+runs to its last step (`-91` = no activity found; this image has no Play Store app). On the
+API 37.2 emulator, inside Kvaesitso, the same chain stopped one step earlier, at the Play
+Store app.
+
 ## Decisions
 
 - **Taps start an Activity** (`actionStartActivity<LaunchActivity>`), not a callback. `LaunchActivity` is non-exported, draws nothing, runs the same ordered chain and finishes.
@@ -111,6 +135,9 @@ START u0 {act=android.intent.action.VIEW dat=claude://code/... flg=0x10008000 pk
 
 ## Not verified here
 
-- The widget on this phone under the stock Pixel launcher (verified on emulators only).
+- The widget on this phone under the stock Pixel launcher. The stock launcher was checked on an
+  emulator, which has no Claude app, so "stock launcher + real Claude" is the one combination
+  not seen in this probe.
+- The pill after a force-stop of Claude (Chat, which uses the same link, was run).
 - The Claude-launcher fallback (deep link fails to resolve but Claude is installed): unit-tested only.
 - The build on the phone predates one `@SuppressLint` annotation on `LaunchActivity`; the runtime code is the same as commit `ba22f34`.

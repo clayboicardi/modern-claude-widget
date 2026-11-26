@@ -1,7 +1,8 @@
 # Modern Claude Widget — notes for Claude Code
 
 A Jetpack Glance home-screen widget that deep-links into the Claude Android app.
-One module (`app`), package `com.clayboicardi.claudewidget`. No activities, no network.
+One module (`app`), package `com.clayboicardi.claudewidget`. No launcher activity, no network.
+The only activity is `LaunchActivity`: private, invisible, started by a widget tap.
 
 Longer docs: [README](README.md) · [DESIGN](DESIGN.md) (what Glance can render) ·
 [route probe](docs/route-probe.md) (on-device results) ·
@@ -40,8 +41,11 @@ Per URI, against `com.anthropic.claude`:
 3. Look at the screen (`android layout`, `android screen capture`). Resolving is not the same
    as landing on the right screen.
 4. Warm: open a different Claude screen, press Home, fire the URI again, look again.
-5. Finally tap the real widget buttons and check logcat for the `START u0 {... claude://...}`
-   line with `result code=0`.
+5. Finally tap the real widget buttons, in every launcher that matters (the Pixel launcher
+   and Kvaesitso, Clay's launcher). Logcat should show two `START u0` lines: first
+   `.LaunchActivity` with `result code=0`, then `claude://...`. A line with `BAL_BLOCK` or
+   "Background activity launch blocked" means the system refused the launch; that never
+   reaches the app as an error.
 
 An emulator has no Claude app, which makes it the place to test the not-installed fallback
 (deep link → Claude launcher → Play Store app → Play Store web page) and widget sizes.
