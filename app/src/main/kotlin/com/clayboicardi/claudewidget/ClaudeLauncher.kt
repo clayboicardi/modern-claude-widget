@@ -3,6 +3,7 @@ package com.clayboicardi.claudewidget
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.net.toUri
 import androidx.glance.action.ActionParameters
 
@@ -72,6 +73,10 @@ object ClaudeLauncher {
      * so a refused attempt (no handler, or a SecurityException from a non-exported or
      * permission-guarded target) always falls through to the next one.
      *
+     * Those two are the failures startActivity documents. Anything else a device throws is
+     * treated the same way and logged: a tap must never crash the app. (v1.0 had that from
+     * Glance's callback receiver, which caught everything; an Activity has to do it itself.)
+     *
      * A launch the system blocks as a background activity start does NOT throw, so it can't
      * be detected here; that is why launches are verified on a device (docs/route-probe.md).
      */
@@ -82,5 +87,10 @@ object ClaudeLauncher {
         false
     } catch (e: SecurityException) {
         false
+    } catch (e: RuntimeException) {
+        Log.w(TAG, "Unexpected failure starting ${intent.action} ${intent.scheme}", e)
+        false
     }
+
+    private const val TAG = "ClaudeWidget"
 }

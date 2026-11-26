@@ -35,12 +35,14 @@ class ClaudeLauncherTest {
         base: Context,
         private val resolves: (Intent) -> Boolean,
         private val denies: (Intent) -> Boolean = { false },
+        private val crashes: (Intent) -> Boolean = { false },
     ) : ContextWrapper(base) {
         val attempted = mutableListOf<Intent>()
         val started = mutableListOf<Intent>()
 
         override fun startActivity(intent: Intent) {
             attempted += intent
+            if (crashes(intent)) throw IllegalStateException("unexpected failure in test")
             if (denies(intent)) throw SecurityException("denied by test")
             if (!resolves(intent)) throw ActivityNotFoundException("no handler in test")
             started += intent
@@ -187,5 +189,25 @@ class ClaudeLauncherTest {
             "https://play.google.com/store/apps/details?id=$claude",
             device.started.single().dataString,
         )
+    }
+
+    // startActivity documents two failures, but a tap must never crash the app whatever a
+    // device throws. v1.0 had this from Glance's callback receiver, which caught everything.
+    @Test
+    fun `an unexpected failure on one attempt falls through to the next`() {
+        installClaudeLauncher()
+        val device = FakeDevice(app, resolves = { true }, crashes = ::isClaudeLink)
+        val started = tap(device, "code")
+
+        assertTrue(started)
+        assertEquals(Intent.ACTION_MAIN, device.started.single().action)
+    }
+
+    @Test
+    fun `nothing escapes when every attempt fails unexpectedly`() {
+        val device = FakeDevice(app, resolves = { true }, crashes = { true })
+
+        assertFalse(tap(device, "chat"))
+        assertEquals(3, device.attempted.size) // deep link, market, https
     }
 }
