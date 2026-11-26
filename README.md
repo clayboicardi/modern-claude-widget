@@ -41,7 +41,7 @@ ViewUri(claude://…)  →  Claude app launcher  →  Play Store (market:// then
 
 ## Build & run
 
-**Requirements:** JDK 17+, Android SDK with **API 37** platform + **Build-Tools 37**, a device/emulator on Android 12+ (minSdk 31). The Gradle wrapper pins Gradle 9.9.2 (checksum-verified); the build uses AGP 9.5.2 and Kotlin 2.4.21.
+**Requirements:** JDK 17+, Android SDK with **API 37** platform + **Build-Tools 37**, a device/emulator on Android 12+ (minSdk 31). The Gradle wrapper pins Gradle 9.9.2 (checksum-verified); the build uses AGP 9.5.3 and Kotlin 2.4.21.
 
 **Android Studio:** open the project and let it sync. The app has no activity, so install it (`./gradlew installDebug`) rather than Run it. Then long-press the home screen → **Widgets** → **Claude Widget**.
 

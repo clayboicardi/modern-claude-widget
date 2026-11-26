@@ -1,5 +1,5 @@
 [versions]
-agp = "9.5.2"
+agp = "9.5.3"
 # AGP's built-in Kotlin ships KGP 2.2.10 as a floor. The root build file puts this newer
 # KGP on the buildscript classpath (the documented way to raise it), and the Compose
 # compiler plugin uses the same version so the two always match.
