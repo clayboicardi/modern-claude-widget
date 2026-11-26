@@ -140,4 +140,4 @@ Store app.
   not seen in this probe.
 - The pill after a force-stop of Claude (Chat, which uses the same link, was run).
 - The Claude-launcher fallback (deep link fails to resolve but Claude is installed): unit-tested only.
-- The build on the phone predates one `@SuppressLint` annotation on `LaunchActivity`; the runtime code is the same as commit `ba22f34`.
+- The build on the phone is the runtime code of commit `ba22f34`. Two later changes are not on it: a `@SuppressLint` annotation on `LaunchActivity`, and a `catch` that turns an unexpected `startActivity` exception into a failed attempt. Neither changes a successful tap; the branch head with both was run on the API 37.0 emulator (section above).
