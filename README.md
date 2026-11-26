@@ -56,6 +56,7 @@ ViewUri(claude://…)  →  Claude app launcher  →  Play Store (market:// then
 
 - **After a force-stop the widget turns grey.** Android (15 and later) disables the widgets of a force-stopped app. Tap the grey widget once and it comes back; no need to re-add it.
 - **Sizes.** Resizable from 2 cells wide (icons only) up to full width (icons + labels), 2 rows tall or more.
+- **Kvaesitso.** The launcher adds the widget narrow, inside its own card. Resize it to full width, then in the widget's settings turn **Borderless** on and **Background card** off.
 
 ## Tech stack
 
